@@ -20,12 +20,15 @@ setup(
         'boto3>=1.3.1'
     ],
 
-    packages=['scripta'],
+    packages=[
+        'scripta.aws',
+        'scripta.template'
+    ],
     package_dir={'': 'src'},
 
     entry_points={
         'console_scripts': [
-            'scripta=scripta:main',
+            'scripta=scripta.main:main',
         ],
     }
 )
