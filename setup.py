@@ -21,7 +21,7 @@ setup(
     ],
 
     packages=[
-        'scripta'
+        'scripta',
         'scripta.aws',
         'scripta.template'
     ],
