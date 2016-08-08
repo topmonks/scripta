@@ -15,7 +15,10 @@ setup(
 
     license='MIT',
 
-    install_requires=['yaml', 'boto3'],
+    install_requires=[
+        'PyYAML>=3.11',
+        'boto3>=1.3.1'
+    ],
 
     packages=['scripta'],
     package_dir={'': 'src'},
