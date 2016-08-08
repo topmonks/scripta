@@ -46,14 +46,12 @@ def put_rest_api(args=None):
         body = f.read()
 
     # put rest api definition
-    client = boto3.Session().client('apigateway')
-    response = client.put_rest_api(
+    boto3.Session().client('apigateway').put_rest_api(
         restApiId=xargs.rest_api_id,
         mode='overwrite',
         failOnWarnings=True,
         body=body
     )
-    print(response)
 
 
 def create_deployment(args=None):
@@ -64,7 +62,6 @@ def create_deployment(args=None):
     :return:
     """
     parser = argparse.ArgumentParser(description='API Gateway: REST API deployment')
-    parser.add_argument('swagger', help='input swagger file, YAML')
     parser.add_argument('--rest-api-id', required=True)
     parser.add_argument('--stage-name', required=True)
     parser.add_argument('--description', required=True)
@@ -73,10 +70,8 @@ def create_deployment(args=None):
     print("Deploying API Gateway to stage: %s" % (xargs.stage_name,))
 
     # put rest api definition
-    client = boto3.Session().client('apigateway')
-    response = client.create_deployment(
+    boto3.Session().client('apigateway').create_deployment(
         restApiId=xargs.rest_api_id,
         stageName=xargs.stage_name,
         description=xargs.description
     )
-    print(response)

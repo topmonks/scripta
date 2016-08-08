@@ -12,15 +12,13 @@ def add_permission(session, method):
 
     arn = 'arn:aws:execute-api:{region}:{account_id}:{rest_api_id}/{stage_name}/{method}{endpoint}'
 
-    client = session.client('lambda')
-    response = client.add_permission(
+    session.client('lambda').add_permission(
         FunctionName=method['function_name'],
         StatementId=str(uuid.uuid4()),
         Action='lambda:InvokeFunction',
         Principal='apigateway.amazonaws.com',
         SourceArn=arn.format(**method)
     )
-    print(response)
 
 
 def add_permissions(args=None):
