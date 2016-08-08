@@ -16,11 +16,12 @@ setup(
     license='MIT',
 
     install_requires=[
-        'PyYAML>=3.11',
-        'boto3>=1.3.1'
+        'PyYAML',
+        'boto3'
     ],
 
     packages=[
+        'scripta'
         'scripta.aws',
         'scripta.template'
     ],
