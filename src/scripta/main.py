@@ -6,11 +6,15 @@ import importlib
 import traceback
 
 
+clients = {
+    'lambda': 'lambda_'
+}
+
+
 # noinspection PyBroadException
 def invoke(module, client, command, args):
     try:
-        path = ('scripta.%s.%s' % (module, client)).replace('-', '_')
-        instance = importlib.import_module(path)
+        instance = importlib.import_module('scripta.%s.%s' % (module, clients.get(client, client)))
         function = getattr(instance, command.replace('-', '_'))
     except Exception:
         print('Failed to load command %s.%s.%s()' % (module, client, command))
