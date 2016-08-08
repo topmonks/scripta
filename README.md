@@ -10,5 +10,8 @@
     * AWS
         * apigateway
             * generate-swagger
-        * lambdas
+            * put-rest-api
+            * create-deployment
+        * lambda
             * add-permissions
+            * put-alias

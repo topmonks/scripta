@@ -2,6 +2,7 @@
 import argparse
 import uuid
 import boto3
+from botocore.exceptions import ClientError
 from scripta.template.lambdas import template
 from scripta.template.yam import load
 
@@ -48,3 +49,47 @@ def add_permissions(args=None):
     for method in context['lambdas']:
         method.update(rest_api_id=xargs.rest_api_id, stage_name=xargs.stage_name)
         add_permission(session, method)
+
+
+def put_alias(args=None):
+    """
+    create or update lambda alias
+
+    :param args:
+    :return:
+    """
+    # command-line parser
+    parser = argparse.ArgumentParser(description='Lambda: Create/Update alias')
+    parser.add_argument('--function-name', required=True)
+    parser.add_argument('--name', required=True)
+    parser.add_argument('--function-version', required=True)
+    xargs = parser.parse_args(args=args)
+
+    description = "%s:%s, version %s" % (xargs.function_name, xargs.name, xargs.function_version)
+    client = boto3.Session().client('lambda')
+
+    try:
+        alias = client.get_alias(
+            FunctionName=xargs.function_name,
+            Name=xargs.name
+        )
+    except ClientError:
+        alias = None
+
+    if alias:
+        print("Updating lambda alias:", description)
+
+        client.update_alias(
+            FunctionName=xargs.function_name,
+            Name=xargs.name,
+            FunctionVersion=xargs.function_version
+        )
+
+    else:
+        print("Creating lambda alias:", description)
+
+        client.create_alias(
+            FunctionName=xargs.function_name,
+            Name=xargs.name,
+            FunctionVersion=xargs.function_version
+        )
