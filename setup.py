@@ -2,12 +2,12 @@
 
 from distutils.core import setup
 
-print('setup running for scripta')
-setup(name='Scripta',
+setup(name='scripta',
       version='0.0.1',
       description='Scripting & Tooling',
       author='Tomas Bouda',
       author_email='tomas.bouda@purposefly.com',
-      # url='https://www.python.org/sigs/distutils-sig/',
-      # packages=['distutils', 'distutils.command']
+      url='https://github.com/purposefly/scripta',
+      packages=['scripta'],
+      package_dir={'scripta': 'src/scripta'},
       )
