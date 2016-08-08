@@ -41,13 +41,17 @@ def put_rest_api(args=None):
 
     print("Importing Swagger to API Gateway: %s" % (xargs.swagger,))
 
+    # read file
+    with open(xargs.swagger) as f:
+        body = f.read()
+
     # put rest api definition
     client = boto3.Session().client('apigateway')
     response = client.put_rest_api(
         restApiId=xargs.rest_api_id,
         mode='overwrite',
         failOnWarnings=True,
-        body=load(xargs.swagger)
+        body=body
     )
     print(response)
 
