@@ -1,2 +1,13 @@
+#!/usr/bin/env python
+
+from distutils.core import setup
 
 print('setup running for scripta')
+setup(name='Scripta',
+      version='0.0.1',
+      description='Scripting & Tooling',
+      author='Tomas Bouda',
+      author_email='tomas.bouda@purposefly.com',
+      # url='https://www.python.org/sigs/distutils-sig/',
+      # packages=['distutils', 'distutils.command']
+      )
