@@ -8,6 +8,6 @@ setup(name='scripta',
       author='Tomas Bouda',
       author_email='tomas.bouda@purposefly.com',
       url='https://github.com/purposefly/scripta',
-      # packages=['scripta', 'scripta.aws'],
+      packages=['scripta.aws'],
       package_dir={'': 'src'},
       )
