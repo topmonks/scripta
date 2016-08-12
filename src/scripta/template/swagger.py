@@ -9,7 +9,7 @@ template = Template()
 
 # noinspection PyUnusedLocal
 @template.filter
-def ignore_x_purposefly(cursor, *args, **kwargs):
+def ignore_x_purposefly(cursor, **kwargs):
     """
     ignore custom elements: x-purposefly
 
@@ -21,7 +21,7 @@ def ignore_x_purposefly(cursor, *args, **kwargs):
 
 # noinspection PyUnusedLocal
 @template.after
-def delete_x_purposefly(cursor, *args, **kwargs):
+def delete_x_purposefly(cursor, **kwargs):
     """
     delete custom elements: x-purposefly
 
@@ -33,7 +33,7 @@ def delete_x_purposefly(cursor, *args, **kwargs):
 
 # noinspection PyUnusedLocal
 @template.on('paths', None, ['get', 'post', 'put', 'delete', 'options'])
-def http_method_template(cursor, *args, **kwargs):
+def http_method_template(cursor, **kwargs):
     """
     setup HTTP methods for endpoint based on templates
 
@@ -47,7 +47,7 @@ def http_method_template(cursor, *args, **kwargs):
 
 # noinspection PyUnusedLocal
 @template.on('paths', None, ['get', 'post', 'put', 'delete', 'options'])
-def http_method_parameters(cursor, *args, **kwargs):
+def http_method_parameters(cursor, **kwargs):
     """
     create parameter description based on endpoint URI
 
@@ -70,7 +70,7 @@ def http_method_parameters(cursor, *args, **kwargs):
 
 # noinspection PyUnusedLocal
 @template.on(key='method.response.header.Access-Control-Allow-Methods')
-def cors_allowed_methods(cursor, *args, **kwargs):
+def cors_allowed_methods(cursor, **kwargs):
     """
     setup allowed methods for CORS based on definitions
 
@@ -87,7 +87,7 @@ def cors_allowed_methods(cursor, *args, **kwargs):
 
 # noinspection PyUnusedLocal
 @template.on(key='application/json')
-def application_json(cursor, *args, **kwargs):
+def application_json(cursor, **kwargs):
     """
     convert json template from dictionary to string
 
@@ -102,7 +102,7 @@ def application_json(cursor, *args, **kwargs):
 
 # noinspection PyUnusedLocal
 @template.on()
-def x_format(cursor, defs=None, *args, **kwargs):
+def x_format(cursor, defs=None, **kwargs):
     """
     provide formatting capabilities to uri
 

@@ -8,8 +8,17 @@ template = Template()
 
 
 # noinspection PyUnusedLocal
+@template.before
+def before(cursor, defs=None, context=None):
+    context.update({
+        'lambdas': [],
+        'authorizers': [],
+    })
+
+
+# noinspection PyUnusedLocal
 @template.on('paths', None, ['get', 'post', 'put', 'delete', 'options'], 'x-amazon-apigateway-integration', 'uri')
-def uri(cursor, context, *args, **kwargs):
+def uri(cursor, context=None, **kwargs):
     # endpoint
     endpoint = cursor.parent(2).key
     endpoint = re.sub(r'{[^}]+}', '*', endpoint)
@@ -27,6 +36,27 @@ def uri(cursor, context, *args, **kwargs):
     context['lambdas'] += [dict(
         endpoint=endpoint,
         method=method,
+        url=url,
+        function_name=function_name,
+        region=region,
+        account_id=account_id
+    )]
+
+
+# noinspection PyUnusedLocal
+@template.on(key='authorizerUri')
+def authorizer_uri(cursor, context=None, **kwargs):
+    # endpoint
+    authorizer = cursor.parent(2).key
+
+    # url
+    url = cursor.value
+    pattern = r'arn:.*/(arn:aws:lambda:([^:]+):([^:]+):function:[^/]+)/invocations'
+    function_name, region, account_id = re.match(pattern, url).groups()
+
+    # update context
+    context['lambdas'] += [dict(
+        authorizer=authorizer,
         url=url,
         function_name=function_name,
         region=region,

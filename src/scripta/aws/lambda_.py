@@ -3,7 +3,7 @@ import argparse
 import uuid
 import boto3
 from botocore.exceptions import ClientError
-from scripta.template.lambdas import template
+from scripta.template.lambda_ import template
 from scripta.template.yam import load
 
 
@@ -38,8 +38,8 @@ def add_permissions(args=None):
     print("Add lambda permissions: %s" % (xargs.swagger,))
 
     # template rendering
-    context = {'lambdas': []}
     data = load(xargs.swagger)
+    context = {}
     template.render(data, context=context)
 
     # add permissions
