@@ -55,7 +55,7 @@ def authorizer_uri(cursor, context=None, **kwargs):
     function_name, region, account_id = re.match(pattern, url).groups()
 
     # update context
-    context['lambdas'] += [dict(
+    context['authorizers'] += [dict(
         authorizer=authorizer,
         url=url,
         function_name=function_name,
