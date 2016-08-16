@@ -31,6 +31,7 @@ def uri(cursor, context=None, **kwargs):
     url = cursor.value
     pattern = r'arn:.*/(arn:aws:lambda:([^:]+):([^:]+):function:[^/]+)/invocations'
     function_name, region, account_id = re.match(pattern, url).groups()
+    name, = re.match(r'.*function:([^:]+)', function_name).groups()
 
     # update context
     context['lambdas'] += [dict(
@@ -39,7 +40,8 @@ def uri(cursor, context=None, **kwargs):
         url=url,
         function_name=function_name,
         region=region,
-        account_id=account_id
+        account_id=account_id,
+        name=name,
     )]
 
 
@@ -53,6 +55,7 @@ def authorizer_uri(cursor, context=None, **kwargs):
     url = cursor.value
     pattern = r'arn:.*/(arn:aws:lambda:([^:]+):([^:]+):function:[^/]+)/invocations'
     function_name, region, account_id = re.match(pattern, url).groups()
+    name, = re.match(r'.*function:([^:]+)', function_name).groups()
 
     # update context
     context['authorizers'] += [dict(
@@ -60,5 +63,6 @@ def authorizer_uri(cursor, context=None, **kwargs):
         url=url,
         function_name=function_name,
         region=region,
-        account_id=account_id
+        account_id=account_id,
+        name=name,
     )]
