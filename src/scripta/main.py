@@ -4,7 +4,8 @@ import sys
 import argparse
 import importlib
 import traceback
-
+import pprint
+from botocore.exceptions import ClientError
 
 clients = {
     'lambda': 'lambda_'
@@ -22,6 +23,10 @@ def invoke(module, client, command, args):
 
     try:
         function(args)
+    except ClientError as e:
+        traceback.print_exc()
+        pprint.pprint(e.response)
+        sys.exit(255)
     except Exception:
         traceback.print_exc()
         sys.exit(255)
