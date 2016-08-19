@@ -1,8 +1,8 @@
 
 import argparse
 import uuid
-import boto3
 from botocore.exceptions import ClientError
+from scripta.aws.core import Session
 from scripta.template.lambda_ import template
 from scripta.template.yam import load
 
@@ -43,7 +43,8 @@ def add_permissions(args=None):
     template.render(data, context=context)
 
     # add permissions
-    session = boto3.Session()
+    session = Session()
+
     for method in context['lambdas']:
         method.update(rest_api_id=xargs.rest_api_id, stage_name=xargs.stage_name)
         add_permission(session, method)
@@ -64,7 +65,7 @@ def put_alias(args=None):
     xargs = parser.parse_args(args=args)
 
     description = "%s:%s, version %s" % (xargs.function_name, xargs.name, xargs.function_version)
-    client = boto3.Session().client('lambda')
+    client = Session().client('lambda')
 
     try:
         alias = client.get_alias(

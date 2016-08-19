@@ -1,5 +1,4 @@
 
-import boto3
 import json
 import os
 import os.path
@@ -7,6 +6,7 @@ import urllib.request as request
 import subprocess
 import yaml
 from datetime import datetime
+from scripta.aws.core import Session
 from scripta.template.lambda_ import template as lambda_template
 from scripta.template.swagger_redef import template as swagger_redef_template
 
@@ -15,7 +15,7 @@ class Replica:
 
     def __init__(self):
         # AWS session
-        self.session = boto3.Session()
+        self.session = Session()
 
         # AWS parameters
         self.restApiId = ''   # TODO
@@ -171,10 +171,10 @@ class Replica:
             raise ValueError('invalid data type')
 
 
-rep = Replica()
-rep.get_apigateway()
-rep.redefine_apigateway()
-rep.export_lambda()
-rep.redefine_lambda()
-rep.create_lambda()
-rep.get_cloudformation()
+# rep = Replica()
+# rep.get_apigateway()
+# rep.redefine_apigateway()
+# rep.export_lambda()
+# rep.redefine_lambda()
+# rep.create_lambda()
+# rep.get_cloudformation()

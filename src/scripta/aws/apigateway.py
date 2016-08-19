@@ -1,6 +1,6 @@
 
 import argparse
-import boto3
+from scripta.aws.core import Session
 from scripta.template.swagger import template
 from scripta.template.yam import load, dump
 
@@ -46,7 +46,7 @@ def put_rest_api(args=None):
         body = f.read()
 
     # put rest api definition
-    boto3.Session().client('apigateway').put_rest_api(
+    Session().client('apigateway').put_rest_api(
         restApiId=xargs.rest_api_id,
         mode='overwrite',
         failOnWarnings=True,
@@ -70,7 +70,7 @@ def create_deployment(args=None):
     print("Deploying API Gateway to stage: %s" % (xargs.stage_name,))
 
     # put rest api definition
-    boto3.Session().client('apigateway').create_deployment(
+    Session().client('apigateway').create_deployment(
         restApiId=xargs.rest_api_id,
         stageName=xargs.stage_name,
         description=xargs.description
