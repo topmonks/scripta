@@ -9,9 +9,11 @@
 * module / client / command
     * AWS
         * apigateway
+            * create-deployment
             * generate-swagger
             * put-rest-api
-            * create-deployment
         * lambda
             * add-permissions
+            * delete-functions
+            * list-functions
             * put-alias

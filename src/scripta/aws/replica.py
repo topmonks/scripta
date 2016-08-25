@@ -6,7 +6,7 @@ import urllib.request as request
 import subprocess
 import yaml
 from datetime import datetime
-from scripta.aws.core import Session
+from scripta.aws.core import AWSSession
 from scripta.template.lambda_ import template as lambda_template
 from scripta.template.swagger_redef import template as swagger_redef_template
 
@@ -15,7 +15,7 @@ class Replica:
 
     def __init__(self):
         # AWS session
-        self.session = Session()
+        self.session = AWSSession()
 
         # AWS parameters
         self.restApiId = ''   # TODO

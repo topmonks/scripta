@@ -1,8 +1,27 @@
 
-import argparse
-from scripta.aws.core import Session
+from scripta.cli import parse_arguments
+from scripta.aws.core import AWSSession
 from scripta.template.swagger import template
 from scripta.template.yam import load, dump
+
+
+def create_deployment(args=None):
+    """
+    create Gateway API deployment to a given stage
+
+    :param args:
+    :return:
+    """
+    xargs = parse_arguments('aws.apigateway.create-deployment', args=args)
+
+    print("Deploying API Gateway to stage: %s" % (xargs.stage_name,))
+
+    # put rest api definition
+    AWSSession().client('apigateway').create_deployment(
+        restApiId=xargs.rest_api_id,
+        stageName=xargs.stage_name,
+        description=xargs.description
+    )
 
 
 def generate_swagger(args=None):
@@ -12,11 +31,7 @@ def generate_swagger(args=None):
     :param args:
     :return:
     """
-    parser = argparse.ArgumentParser(description='API Gateway: Swagger Generator')
-    parser.add_argument('template', help='input template file, YAML')
-    parser.add_argument('swagger', help='output swagger file, YAML')
-    parser.add_argument('--def', nargs=2, metavar='X', action='append', help='Define a generic key-value pair')
-    xargs = parser.parse_args(args=args)
+    xargs = parse_arguments('aws.apigateway.generate-swagger', args=args)
 
     print("Generating Swagger for API Gateway: %s -> %s" % (xargs.template, xargs.swagger))
 
@@ -34,10 +49,7 @@ def put_rest_api(args=None):
     :param args:
     :return:
     """
-    parser = argparse.ArgumentParser(description='API Gateway: REST API Import')
-    parser.add_argument('swagger', help='input swagger file, YAML')
-    parser.add_argument('--rest-api-id', required=True)
-    xargs = parser.parse_args(args=args)
+    xargs = parse_arguments('aws.apigateway.put-rest-api', args=args)
 
     print("Importing Swagger to API Gateway: %s" % (xargs.swagger,))
 
@@ -46,32 +58,9 @@ def put_rest_api(args=None):
         body = f.read()
 
     # put rest api definition
-    Session().client('apigateway').put_rest_api(
+    AWSSession().client('apigateway').put_rest_api(
         restApiId=xargs.rest_api_id,
         mode='overwrite',
         failOnWarnings=True,
         body=body
-    )
-
-
-def create_deployment(args=None):
-    """
-    create Gateway API deployment to a given stage
-
-    :param args:
-    :return:
-    """
-    parser = argparse.ArgumentParser(description='API Gateway: REST API deployment')
-    parser.add_argument('--rest-api-id', required=True)
-    parser.add_argument('--stage-name', required=True)
-    parser.add_argument('--description', required=True)
-    xargs = parser.parse_args(args=args)
-
-    print("Deploying API Gateway to stage: %s" % (xargs.stage_name,))
-
-    # put rest api definition
-    Session().client('apigateway').create_deployment(
-        restApiId=xargs.rest_api_id,
-        stageName=xargs.stage_name,
-        description=xargs.description
     )

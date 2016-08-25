@@ -5,7 +5,7 @@ from time import sleep
 from pprint import pprint
 
 
-class ClientProxy:
+class AWSClientProxy:
 
     def __init__(self, client):
         self.__client = client
@@ -13,7 +13,7 @@ class ClientProxy:
     def __getattr__(self, item):
         obj = getattr(self.__client, item)
         if callable(obj):
-            return ClientProxy.__wrap(obj)
+            return AWSClientProxy.__wrap(obj)
         return obj
 
     @staticmethod
@@ -28,7 +28,7 @@ class ClientProxy:
                     pprint(e)
                     pprint(e.response)
 
-                    if ClientProxy.__statuscode(e) == 429 and backoff:
+                    if AWSClientProxy.__statuscode(e) == 429 and backoff:
                         delay = backoff.pop()
                         print('will retry API call in %d seconds' % (delay,))
                         sleep(delay)
@@ -46,10 +46,10 @@ class ClientProxy:
             return None
 
 
-class Session:
+class AWSSession:
 
     def __init__(self, *args, **kwargs):
         self.session = boto3.Session(*args, **kwargs)
 
     def client(self, *args, **kwargs):
-        return ClientProxy(self.session.client(*args, **kwargs))
+        return AWSClientProxy(self.session.client(*args, **kwargs))

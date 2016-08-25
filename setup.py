@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='scripta',
-    version='0.0.9',
+    version='0.0.10',
 
     description='Scripting & Tooling for AWS',
 

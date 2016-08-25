@@ -1,24 +1,10 @@
 
-import argparse
 import uuid
 from botocore.exceptions import ClientError
-from scripta.aws.core import Session
+from scripta.cli import parse_arguments
+from scripta.aws.core import AWSSession
 from scripta.template.lambda_ import template
 from scripta.template.yam import load
-
-
-def add_permission(session, method):
-    print("adding permission: {rest_api_id} {stage_name} {method} {endpoint} -> {function_name}".format(**method))
-
-    arn = 'arn:aws:execute-api:{region}:{account_id}:{rest_api_id}/{stage_name}/{method}{endpoint}'
-
-    session.client('lambda').add_permission(
-        FunctionName=method['function_name'],
-        StatementId=str(uuid.uuid4()),
-        Action='lambda:InvokeFunction',
-        Principal='apigateway.amazonaws.com',
-        SourceArn=arn.format(**method)
-    )
 
 
 def add_permissions(args=None):
@@ -28,12 +14,7 @@ def add_permissions(args=None):
     :param args:
     :return:
     """
-    # command-line parser
-    parser = argparse.ArgumentParser(description='Lambda: Add permissions')
-    parser.add_argument('swagger', help='input swagger file, YAML')
-    parser.add_argument('--rest-api-id', required=True)
-    parser.add_argument('--stage-name', required=True)
-    xargs = parser.parse_args(args=args)
+    xargs = parse_arguments('aws.lambda.add-permissions', args=args)
 
     print("Add lambda permissions: %s" % (xargs.swagger,))
 
@@ -43,11 +24,56 @@ def add_permissions(args=None):
     template.render(data, context=context)
 
     # add permissions
-    session = Session()
+    client = AWSSession().client('lambda')
 
     for method in context['lambdas']:
+        arn = 'arn:aws:execute-api:{region}:{account_id}:{rest_api_id}/{stage_name}/{method}{endpoint}'
         method.update(rest_api_id=xargs.rest_api_id, stage_name=xargs.stage_name)
-        add_permission(session, method)
+
+        print("adding permission: {rest_api_id} {stage_name} {method} {endpoint} -> {function_name}".format(**method))
+
+        client.add_permission(
+            FunctionName=method['function_name'],
+            StatementId=str(uuid.uuid4()),
+            Action='lambda:InvokeFunction',
+            Principal='apigateway.amazonaws.com',
+            SourceArn=arn.format(**method)
+        )
+
+
+def delete_functions(args=None):
+    """
+    delete selected lambda functions
+
+    :param args:
+    :return:
+    """
+    xargs = parse_arguments('aws.lambda.delete-functions', args=args)
+
+    # delete functions
+    client = AWSSession().client('lambda')
+
+    for function_name in xargs.name:
+        print('deleting function:', function_name)
+
+        client.delete_function(
+            FunctionName=function_name
+        )
+
+
+def list_functions(args=None):
+    """
+    list all lambda functions
+
+    :param args:
+    :return:
+    """
+    parse_arguments('aws.lambda.list-functions', args=args)
+
+    response = AWSSession().client('lambda').list_functions()
+    functions = [f['FunctionName'] for f in response['Functions']]
+
+    print('\n'.join(sorted(functions)))
 
 
 def put_alias(args=None):
@@ -57,15 +83,11 @@ def put_alias(args=None):
     :param args:
     :return:
     """
-    # command-line parser
-    parser = argparse.ArgumentParser(description='Lambda: Create/Update alias')
-    parser.add_argument('--function-name', required=True)
-    parser.add_argument('--name', required=True)
-    parser.add_argument('--function-version', required=True)
-    xargs = parser.parse_args(args=args)
+    xargs = parse_arguments('aws.lambda.put-alias', args=args)
 
     description = "%s:%s, version %s" % (xargs.function_name, xargs.name, xargs.function_version)
-    client = Session().client('lambda')
+
+    client = AWSSession().client('lambda')
 
     try:
         alias = client.get_alias(
