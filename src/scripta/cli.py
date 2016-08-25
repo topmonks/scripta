@@ -77,7 +77,7 @@ commands = {
     'aws.lambda.delete-functions': {
         'parser': IC(description='Lambda: Delete functions'),
         'arguments': [
-            IC('name', nargs='+', help='function name'),
+            IC('name', nargs='*', help='function name'),
         ]
     },
     'aws.lambda.list-functions': {

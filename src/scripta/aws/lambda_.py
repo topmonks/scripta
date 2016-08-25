@@ -1,5 +1,6 @@
 
 import uuid
+import re
 from botocore.exceptions import ClientError
 from scripta.cli import parse_arguments
 from scripta.aws.core import AWSSession
@@ -50,15 +51,22 @@ def delete_functions(args=None):
     """
     xargs = parse_arguments('aws.lambda.delete-functions', args=args)
 
-    # delete functions
     client = AWSSession().client('lambda')
 
-    for function_name in xargs.name:
-        print('deleting function:', function_name)
+    # list functions
+    response = client.list_functions()
 
-        client.delete_function(
-            FunctionName=function_name
-        )
+    # delete functions
+    for function in response['Functions']:
+        function_name = function['FunctionName']
+
+        # match regex
+        if any(re.match(pattern, function_name) for pattern in xargs.name):
+            print('deleting function:', function_name)
+
+            client.delete_function(
+                FunctionName=function_name
+            )
 
 
 def list_functions(args=None):
@@ -70,9 +78,11 @@ def list_functions(args=None):
     """
     parse_arguments('aws.lambda.list-functions', args=args)
 
-    response = AWSSession().client('lambda').list_functions()
-    functions = [f['FunctionName'] for f in response['Functions']]
+    # list functions
+    client = AWSSession().client('lambda')
+    response = client.list_functions()
 
+    functions = [f['FunctionName'] for f in response['Functions']]
     print('\n'.join(sorted(functions)))
 
 
