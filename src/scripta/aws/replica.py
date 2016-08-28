@@ -25,8 +25,8 @@ class Replica:
         self.source_path = './DEV'
         self.target_path = './PROD'
 
-        self._mkdir(self.source_path)
-        self._mkdir(self.target_path)
+        os.makedirs(self.source_path, exist_ok=True)
+        os.makedirs(self.target_path, exist_ok=True)
 
     def get_apigateway(self):
         print('+ getting apigateway definition ...')
@@ -126,13 +126,6 @@ class Replica:
         client = self.session.client('cloudformation')
         response = client.describe_stacks()
         self._save(self.source_path, 'cloudformation.describe_stacks.json', response)
-
-    @staticmethod
-    def _mkdir(path):
-        try:
-            os.mkdir(path)
-        except FileExistsError:
-            pass
 
     @staticmethod
     def _serialize(obj):

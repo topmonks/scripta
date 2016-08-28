@@ -66,6 +66,18 @@ commands = {
             IC('--rest-api-id', required=True),
         ]
     },
+    'aws.dynamodb.export-tables': {
+        'parser': IC(description='DynamoDB: Export tables'),
+        'arguments': [
+            IC('name', nargs='*', help='table name (regex pattern)'),
+            IC('--directory', required=True),
+        ]
+    },
+    'aws.dynamodb.list-tables': {
+        'parser': IC(description='DynamoDB: List tables'),
+        'arguments': [
+        ]
+    },
     'aws.lambda.add-permissions': {
         'parser': IC(description='Lambda: Add permissions'),
         'arguments': [
@@ -77,7 +89,7 @@ commands = {
     'aws.lambda.delete-functions': {
         'parser': IC(description='Lambda: Delete functions'),
         'arguments': [
-            IC('name', nargs='*', help='function name'),
+            IC('name', nargs='*', help='function name (regex pattern)'),
         ]
     },
     'aws.lambda.list-functions': {

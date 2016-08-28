@@ -12,6 +12,9 @@
             * create-deployment
             * generate-swagger
             * put-rest-api
+        * dynamodb
+            * list-tables
+            * export-tables
         * lambda
             * add-permissions
             * delete-functions
