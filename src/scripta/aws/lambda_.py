@@ -30,6 +30,8 @@ def add_permissions(args=None):
     for method in context['lambdas']:
         arn = 'arn:aws:execute-api:{region}:{account_id}:{rest_api_id}/{stage_name}/{method}{endpoint}'
         method.update(rest_api_id=xargs.rest_api_id, stage_name=xargs.stage_name)
+        if method['method'] == 'X-AMAZON-APIGATEWAY-ANY-METHOD':
+            method['method'] = '*'
 
         print("adding permission: {rest_api_id} {stage_name} {method} {endpoint} -> {function_name}".format(**method))
 
