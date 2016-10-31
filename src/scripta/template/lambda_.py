@@ -16,8 +16,8 @@ def before(cursor, defs=None, context=None):
     })
 
 
-# noinspection PyUnusedLocal
-@template.on('paths', None, ['get', 'post', 'put', 'delete', 'options'], 'x-amazon-apigateway-integration', 'uri')
+# noinspection PyUnusedLocal,PyPep8
+@template.on('paths', None, ['get', 'post', 'put', 'delete', 'options', 'x-amazon-apigateway-any-method'], 'x-amazon-apigateway-integration', 'uri')
 def uri(cursor, context=None, **kwargs):
     # endpoint
     endpoint = cursor.parent(2).key
