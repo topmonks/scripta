@@ -1,0 +1,7 @@
+__pycache__
+/.idea/*
+!/.idea/runConfigurations/
+!/.idea/modules.xml
+!/.idea/misc.xml
+!/.idea/scripta.iml
+

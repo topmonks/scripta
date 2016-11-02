@@ -20,3 +20,6 @@
             * delete-functions
             * list-functions
             * put-alias
+        * cloudformation
+            * get-stack-output
+

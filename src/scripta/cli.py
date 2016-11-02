@@ -104,5 +104,12 @@ commands = {
             IC('--name', required=True),
             IC('--function-version', required=True),
         ]
+    },
+    'aws.cloudformation.get-stack-output': {
+        'parser': IC(description='CloudFormation: Get stack output'),
+        'arguments': [
+            IC('--stack-name', nargs='+', required=True),
+            IC('--output-key', required=True)
+        ]
     }
 }
