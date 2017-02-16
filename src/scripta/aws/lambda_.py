@@ -56,10 +56,10 @@ def delete_functions(args=None):
     client = AWSSession().client('lambda')
 
     # list functions
-    response = client.list_functions()
+    functions = _list_functions(client)
 
     # delete functions
-    for function in response['Functions']:
+    for function in functions:
         function_name = function['FunctionName']
 
         # match regex
@@ -80,12 +80,31 @@ def list_functions(args=None):
     """
     parse_arguments('aws.lambda.list-functions', args=args)
 
-    # list functions
     client = AWSSession().client('lambda')
-    response = client.list_functions()
 
-    functions = [f['FunctionName'] for f in response['Functions']]
-    print('\n'.join(sorted(functions)))
+    # list functions
+    functions = _list_functions(client)
+
+    for function in functions:
+        print(function['FunctionName'])
+
+
+def _list_functions(client):
+    """
+    list all lambda functions, provide paging support
+
+    :param client: AWS session client
+    :return:
+    """
+    response = client.list_functions()
+    functions = response['Functions']
+
+    # paging
+    while 'NextMarker' in response:
+        response = client.list_functions(Marker=response['NextMarker'])
+        functions += response['Functions']
+
+    return sorted(functions, key=lambda f: f['FunctionName'])
 
 
 def put_alias(args=None):
