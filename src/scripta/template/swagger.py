@@ -32,7 +32,7 @@ def delete_x_purposefly(cursor, **kwargs):
 
 
 # noinspection PyUnusedLocal
-@template.on('paths', None, ['get', 'post', 'put', 'delete', 'options', 'x-amazon-apigateway-any-method'])
+@template.on('paths', None, ['get', 'post', 'put', 'delete', 'head', 'options', 'x-amazon-apigateway-any-method'])
 def http_method_template(cursor, **kwargs):
     """
     setup HTTP methods for endpoint based on templates
@@ -46,7 +46,7 @@ def http_method_template(cursor, **kwargs):
 
 
 # noinspection PyUnusedLocal
-@template.on('paths', None, ['get', 'post', 'put', 'delete', 'options', 'x-amazon-apigateway-any-method'])
+@template.on('paths', None, ['get', 'post', 'put', 'delete', 'head', 'options', 'x-amazon-apigateway-any-method'])
 def http_method_parameters(cursor, **kwargs):
     """
     create parameter description based on endpoint URI
@@ -80,7 +80,7 @@ def cors_allowed_methods(cursor, **kwargs):
     if cursor.value is None:
         allowed = [
             k.upper()
-            for k in ['get', 'post', 'put', 'delete', 'options']
+            for k in ['get', 'post', 'put', 'delete', 'head', 'options']
             if k in cursor.parent(depth=2).value
         ]
         cursor.value = "'%s'" % ','.join(allowed)
