@@ -8,7 +8,7 @@ setup(
 
     description='Scripting & Tooling for AWS',
 
-    url='https://github.com/purposefly/scripta',
+    url='https://github.com/topmonks/scripta',
 
     author='Tomas Bouda',
     author_email='tomas.bouda@purposefly.com',

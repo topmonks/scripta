@@ -1,7 +1,7 @@
 ## Scripting & Tooling for AWS
 
 * install
-    * pip install git+https://github.com/purposefly/scripta
+    * pip install git+https://github.com/topmonks/scripta
 
 * run
     * scripta -h
