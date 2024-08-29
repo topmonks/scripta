@@ -21,7 +21,7 @@ yaml.add_constructor(_mapping_tag, dict_constructor)
 
 def load(path):
     with open(path) as f:
-        return yaml.load(f)
+        return yaml.load(f, Loader=yaml.Loader)
 
 
 def dump(obj, path, **kwargs):
